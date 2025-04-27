@@ -1,0 +1,6 @@
+consensus-layer
+execution-layer
+prysm-data
+
+jwtsecret
+genesis.ssz
