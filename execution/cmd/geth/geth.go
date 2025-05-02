@@ -26,13 +26,14 @@ var stackConf = &node.Config{
 	AuthAddr:         "127.0.0.1",
 	AuthPort:         8551,
 	AuthVirtualHosts: []string{"*"},
-	JWTSecret:        "jwtsecret",
+	JWTSecret:        "config/jwtsecret.txt",
+	// ExternalSigner: ,
 }
 
 // Ethereum service config
 var ethConf = &ethconfig.Config{
 	NetworkId: 12345,
-	Genesis:   loadGenesis("genesis.json"),
+	Genesis:   loadGenesis("config/genesis.json"),
 }
 
 func main() {
@@ -51,35 +52,19 @@ func main() {
 	if err := stack.Start(); err != nil {
 		log.Fatal("Failed to start node: ", err)
 	}
+
+	log.Printf("Node started. Listening on port %d.", stackConf.HTTPPort)
+
 	defer stack.Close()
 
 	// Start the Ethereum service
 	if err := ethService.Start(); err != nil {
 		log.Fatal("Failed to start eth service: ", err)
 	}
+
+	log.Printf("Eth service started.")
+
 	defer ethService.Stop()
-
-	// Unlock the account
-	// password := "testpassword"
-	// accMan := stack.AccountManager()
-	// accs := accMan.Wallets()
-	// if len(accs) == 0 {
-	//     log.Fatalf("No wallets found")
-	// }
-	// var unlockedAccount accounts.Account
-	// for _, wallet := range accs {
-	//     for _, account := range wallet.Accounts() {
-	//         if account.Address.Hex() == "0xC0AB77b270768F317Aca3ad03Cb9A1c17232F2C2" {
-	//             unlockedAccount = account
-	//             err = wallet.Unlock(unlockedAccount, password)
-	//             if err != nil {
-	//                 log.Fatalf("Failed to unlock account: %v", err)
-	//             }
-	//         }
-	//     }
-	// }
-
-	// keystore.unl
 
 	log.Println("Node started. Press Ctrl+C to stop.")
 	select {}

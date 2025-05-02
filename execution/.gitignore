@@ -1,6 +1,7 @@
 // Directories
+build
 data
 
 // Files
-genesis.ssz
-execution
+audit.log
+config/jwtsecret.txt
